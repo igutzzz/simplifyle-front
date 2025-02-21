@@ -13,6 +13,7 @@ const HomePage: React.FC = () => {
     const [isConnected, setIsConnected] = useState(socket.connected);
     const [files, setFiles] = useState<File[]>([]);
     const [roomId, setRoomId] = useState<string>("");
+    const [activeTab, setActiveTab] = useState<string>("send");
 
     useEffect(() => {
         function onConnect() {
@@ -70,7 +71,7 @@ const HomePage: React.FC = () => {
                 <Logo />
                 <Subtitle />
                </div>
-                <Tabs defaultValue="send" className="flex flex-col items-center gap-2 min-h-72">
+                <Tabs defaultValue={activeTab} onValueChange={(value) => setActiveTab(value)} className="flex flex-col items-center gap-2 min-h-72">
                     <TabsList>
                         <TabsTrigger value="send">send</TabsTrigger>
                         <TabsTrigger value="recieve">recieve</TabsTrigger>
@@ -79,7 +80,7 @@ const HomePage: React.FC = () => {
                         <UploadTab onSend={onSend} roomId={roomId} />
                     </TabsContent>
                     <TabsContent value="recieve">
-                        <RecieveTab />
+                        <RecieveTab onRecieve={(code) => console.log(code)} />
                     </TabsContent>
                 </Tabs>
 

@@ -17,7 +17,7 @@ const CodeInput: React.FC<CodeInputProps> = ({ onChange }) => {
       <InputOTP
         value={value}
         maxLength={6}
-        onChange={(value: string) => setValue(value)}
+        onChange={(value: string) => {setValue(value), onChange(value)}}
       >
         <InputOTPGroup>
           <InputOTPSlot className='h-12' index={0} />

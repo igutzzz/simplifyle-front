@@ -1,12 +1,18 @@
+import { useState } from "react";
 import { Button } from "../atoms/button";
 import CodeInput from "../molecules/CodeInput";
 
-const RecieveTab: React.FC = () => {
+interface RecieveTabProps {
+    onRecieve: (code: string) => void;
+}
+
+const RecieveTab: React.FC<RecieveTabProps> = ({onRecieve}) => {
+    const [code, setCode] = useState<string>("");
     return (
         <div className="space-y-4">
-            <CodeInput onChange={() => {}} />
+            <CodeInput onChange={(value) => setCode(value)} />
             <div className="text-center text-sm">
-                <Button className="cursor-pointer transition-all ease-in-out w-40">recieve</Button>
+                <Button onClick={() => onRecieve(code)} className="cursor-pointer transition-all ease-in-out w-40">recieve</Button>
             </div>
         </div>
     )
