@@ -6,11 +6,13 @@ import Subtitle from "../atoms/Subtitle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/atoms/tabs"
 import RecieveTab from "../organisms/RecieveTab";
 import { socket } from "@/lib/socket";
-import { FileData } from "@/types/types";
+import { FileData, RoomData } from "@/types/types";
 
 
 const HomePage: React.FC = () => {
     const [isConnected, setIsConnected] = useState(socket.connected);
+    const [files, setFiles] = useState<File[]>([]);
+    const [roomId, setRoomId] = useState<string>("");
 
     useEffect(() => {
         function onConnect() {
@@ -47,15 +49,18 @@ const HomePage: React.FC = () => {
       }
 
       const onSend = (files: File[]) => {
-        console.log((files))
-        files.forEach((file) => {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            const data = event.target?.result;
-            socket.emit("send", { data, name: file.name });
-          };
-          reader.readAsArrayBuffer(file);
-        });
+        socket.emit("createRoom", "", (response: RoomData) => setRoomId(response.roomId));
+        setFiles(files);
+
+        // console.log((files))
+        // files.forEach((file) => {
+        //   const reader = new FileReader();
+        //   reader.onload = (event) => {
+        //     const data = event.target?.result;
+        //     socket.emit("send", { data, name: file.name });
+        //   };
+        //   reader.readAsArrayBuffer(file);
+        // });
       }
 
     return (
@@ -71,7 +76,7 @@ const HomePage: React.FC = () => {
                         <TabsTrigger value="recieve">recieve</TabsTrigger>
                     </TabsList>
                     <TabsContent value="send">                
-                        <UploadTab onSend={onSend} />
+                        <UploadTab onSend={onSend} roomId={roomId} />
                     </TabsContent>
                     <TabsContent value="recieve">
                         <RecieveTab />
